@@ -1,5 +1,8 @@
+// preload.js
 const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('electronAPI', {
-    onUpdateTopKeys: (callback) => ipcRenderer.on('update-top-keys', (event, data) => callback(data))
+contextBridge.exposeInMainWorld('localtapAPI', {
+    getUsername: () => ipcRenderer.invoke('get-username'),
+    setUsername: (name) => ipcRenderer.invoke('set-username', name),
+    getKeyStats: () => ipcRenderer.invoke('get-keystats')
 });

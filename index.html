@@ -1,28 +1,83 @@
+<!-- === index.html === -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Top Pressed Keys</title>
+    <meta charset="UTF-8">
+    <title>LocalTap Dashboard</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        h1 { font-size: 20px; }
-        ul { padding-left: 20px; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #1e1e2f;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #00d9ff;
+            margin-bottom: 10px;
+        }
+
+        #container {
+            max-width: 500px;
+            margin: auto;
+            background: #2b2b3c;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
+        }
+
+        input[type="text"] {
+            width: calc(100% - 90px);
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #00d9ff;
+            color: #000;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            background-color: #35354d;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        #welcome {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>Top 10 Pressed Keys</h1>
-    <ul id="keyList"></ul>
+    <div id="container">
+        <h1>LocalTap</h1>
+        <div id="welcome">Welcome!</div>
 
-    <script>
-        const keyList = document.getElementById('keyList');
+        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+            <input type="text" id="usernameInput" placeholder="Enter your name">
+            <button id="saveUsername">Save</button>
+        </div>
 
-        window.electronAPI.onUpdateTopKeys((topKeys) => {
-            keyList.innerHTML = '';
-            topKeys.forEach(([key, count]) => {
-                const li = document.createElement('li');
-                li.textContent = `${key} — ${count}`;
-                keyList.appendChild(li);
-            });
-        });
-    </script>
+        <h2>Top 10 Pressed Keys</h2>
+        <ul id="keyStats">
+            <li>Loading...</li>
+        </ul>
+    </div>
+
+    <script src="renderer.js"></script>
 </body>
 </html>
