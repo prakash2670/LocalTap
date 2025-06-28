@@ -1,52 +1,92 @@
-const { ipcRenderer } = require('electron');
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize UI
+  let stats = {
+    totalKeystrokes: 0,
+    topKeys: [],
+    keyOfTheDay: null,
+    totalClicks: 0,
+    totalScrolls: 0
+  };
 
-const usernameInput = document.getElementById('usernameInput');
-const saveBtn = document.getElementById('saveUsername');
-const welcomeDiv = document.getElementById('welcome');
-const keyStatsList = document.getElementById('keyStats');
+  // Get initial data
+  window.electronAPI.invoke('get-initial-stats').then((data) => {
+    stats = data;
+    updateUI();
+  });
 
-// Load username on start
-ipcRenderer.invoke('get-username').then(name => {
-    if (name) {
-        welcomeDiv.textContent = `Welcome, ${name}!`;
-        usernameInput.value = name;
-    }
-});
+  // Event listeners
+  window.electronAPI.receive('key-pressed', (data) => {
+    stats.totalKeystrokes = data.total;
+    updateKey(data.key, data.count);
+    updateUI();
+  });
 
-// Save username
-saveBtn.addEventListener('click', () => {
-    const name = usernameInput.value.trim();
-    if (name.length > 0) {
-        ipcRenderer.send('set-username', name);
-        welcomeDiv.textContent = `Welcome, ${name}!`;
-    }
-});
+  window.electronAPI.receive('stats-update', (data) => {
+    stats = {
+      totalKeystrokes: data.total_keystrokes,
+      topKeys: data.top_keys,
+      keyOfTheDay: data.key_of_the_day,
+      totalClicks: data.total_clicks,
+      totalScrolls: data.total_scrolls
+    };
+    updateUI();
+  });
 
-// Fetch and render top keys
-function updateKeyStats() {
-    ipcRenderer.invoke('get-keystats').then(stats => {
-        const sorted = Object.entries(stats)
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 10);
+  // UI Update functions
+  function updateUI() {
+    updateTotalCounters();
+    updateTopKeys();
+    updateKeyOfTheDay();
+  }
 
-        keyStatsList.innerHTML = '';
+  function updateTotalCounters() {
+    document.getElementById('total-keystrokes').textContent = 
+      stats.totalKeystrokes.toLocaleString();
+    document.getElementById('total-clicks').textContent = 
+      stats.totalClicks.toLocaleString();
+  }
 
-        if (sorted.length === 0) {
-            keyStatsList.innerHTML = '<li>No data yet</li>';
-            return;
-        }
-
-        for (const [key, count] of sorted) {
-            const label = key.startsWith('Key.') ? key : `"${key}"`;
-            const li = document.createElement('li');
-            li.textContent = `${label} — ${count}`;
-            keyStatsList.appendChild(li);
-        }
+  function updateTopKeys() {
+    const container = document.getElementById('top-keys-container');
+    container.innerHTML = '';
+    
+    stats.topKeys.forEach((keyData, index) => {
+      const keyElement = document.createElement('div');
+      keyElement.className = 'key-item';
+      keyElement.innerHTML = `
+        <div class="key-badge">${keyData.key}</div>
+        <div class="key-count">${keyData.count}</div>
+      `;
+      container.appendChild(keyElement);
     });
-}
+  }
 
-// Refresh every 3 seconds
-setInterval(updateKeyStats, 3000);
+  function updateKeyOfTheDay() {
+    if (stats.keyOfTheDay) {
+      const kotd = stats.topKeys.find(k => k.key === stats.keyOfTheDay);
+      if (kotd) {
+        document.getElementById('kotd-key').textContent = kotd.key;
+        document.getElementById('kotd-count').textContent = 
+          `${kotd.count} presses`;
+      }
+    }
+  }
 
-// Also update when app is focused
-window.addEventListener('focus', updateKeyStats);
+  function updateKey(key, count) {
+    // Find and update the key in topKeys
+    let keyIndex = stats.topKeys.findIndex(k => k.key === key);
+    if (keyIndex >= 0) {
+      stats.topKeys[keyIndex].count = count;
+    } else {
+      // Add new key if it's not in top 10 yet
+      stats.topKeys.push({ key, count });
+      stats.topKeys.sort((a, b) => b.count - a.count);
+      stats.topKeys = stats.topKeys.slice(0, 10);
+    }
+    
+    // Update key of the day
+    if (stats.topKeys.length > 0) {
+      stats.keyOfTheDay = stats.topKeys[0].key;
+    }
+  }
+});
