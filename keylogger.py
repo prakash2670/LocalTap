@@ -44,23 +44,10 @@ def get_key_name(key):
 
 def on_key_press(key):
     key_name = get_key_name(key)
+    print(f"[KEY] {key_name}")
     emit({ "source": "keyboard", "name": key_name })
 
-def on_click(x, y, button, pressed):
-    if pressed:
-        name = str(button).replace('Button.', 'Mouse.')
-        emit({ "source": "mouse", "name": name })
-
-def on_scroll(x, y, dx, dy):
-    emit({ "source": "mouse", "name": f"Scroll {dx},{dy}" })
-
-# Start WebSocket
 connect_ws()
-
-# Start listeners
 keyboard.Listener(on_press=on_key_press).start()
-mouse.Listener(on_click=on_click, on_scroll=on_scroll).start()
-
-# Keep alive
 while True:
     time.sleep(10)

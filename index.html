@@ -1,135 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Key & Mouse Tracker</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-start;
-      height: 100vh;
-      margin: 0;
-      background: #1e1e1e;
-      color: #fff;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LocalTap — Realtime Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/png" href="icon.png" />
+  </head>
+  <body class="bg-gray-900 text-white font-sans min-h-screen flex flex-col items-center py-6 px-4">
+    <header class="mb-6">
+      <h1 class="text-4xl font-bold mb-2 text-center">👋 Welcome, <span id="username" class="text-blue-400">User</span></h1>
+      <p class="text-gray-400 text-center">Tracking your activity live...</p>
+    </header>
 
-    .panel {
-      background: #2c2c2c;
-      border-radius: 12px;
-      width: 40%;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      position: relative;
-      transition: all 0.3s ease;
-    }
+    <main class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6">
+      <section class="bg-gray-800 rounded-2xl shadow-xl p-6">
+        <h2 class="text-xl font-semibold mb-4 text-center">⌨️ Top 10 Key Presses</h2>
+        <ul id="topKeysList" class="space-y-2"></ul>
+      </section>
 
-    .panel:hover .full-stats {
-      display: block;
-    }
+      <section class="bg-gray-800 rounded-2xl shadow-xl p-6">
+        <h2 class="text-xl font-semibold mb-4 text-center">📈 Activity Stats</h2>
+        <div id="realtimeStats" class="text-sm text-gray-300">
+          <p class="italic">Waiting for input...</p>
+        </div>
+      </section>
+    </main>
 
-    h2 {
-      text-align: center;
-      margin-bottom: 10px;
-    }
+    <footer class="mt-10 text-sm text-gray-500 text-center">
+      &copy; 2025 LocalTap. All rights reserved.
+    </footer>
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 10px 0;
-    }
-
-    .full-stats {
-      display: none;
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #444;
-      border-radius: 8px;
-      padding: 10px;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 10;
-    }
-
-    .key-entry {
-      display: flex;
-      justify-content: space-between;
-      padding: 4px 0;
-      border-bottom: 1px solid #555;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="panel" id="keyboard-panel">
-    <h2>Keyboard</h2>
-    <ul id="keyboard-top"></ul>
-    <div class="full-stats" id="keyboard-stats"></div>
-  </div>
-
-  <div class="panel" id="mouse-panel">
-    <h2>Mouse</h2>
-    <ul id="mouse-top"></ul>
-    <div class="full-stats" id="mouse-stats"></div>
-  </div>
-
-  <script>
-    const keyboardStats = {};
-    const mouseStats = {};
-
-    const keyboardTopEl = document.getElementById('keyboard-top');
-    const mouseTopEl = document.getElementById('mouse-top');
-
-    const keyboardStatsEl = document.getElementById('keyboard-stats');
-    const mouseStatsEl = document.getElementById('mouse-stats');
-
-    const updateDisplay = () => {
-      const topKeys = Object.entries(keyboardStats)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5);
-
-      keyboardTopEl.innerHTML = topKeys.map(([key, count]) =>
-        `<li><b>${key}</b>: ${count}</li>`).join('');
-
-      keyboardStatsEl.innerHTML = Object.entries(keyboardStats)
-        .sort((a, b) => b[1] - a[1])
-        .map(([key, count]) =>
-          `<div class="key-entry"><span>${key}</span><span>${count}</span></div>`).join('');
-
-      const topMouse = Object.entries(mouseStats)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5);
-
-      mouseTopEl.innerHTML = topMouse.map(([btn, count]) =>
-        `<li><b>${btn}</b>: ${count}</li>`).join('');
-
-      mouseStatsEl.innerHTML = Object.entries(mouseStats)
-        .sort((a, b) => b[1] - a[1])
-        .map(([btn, count]) =>
-          `<div class="key-entry"><span>${btn}</span><span>${count}</span></div>`).join('');
-    };
-
-    // Keyboard
-    document.addEventListener('keydown', (e) => {
-      const key = e.key || `KeyCode:${e.keyCode}`;
-      keyboardStats[key] = (keyboardStats[key] || 0) + 1;
-      updateDisplay();
-    });
-
-    // Mouse
-    document.addEventListener('mousedown', (e) => {
-      const buttonMap = {
-        0: 'Left Click',
-        1: 'Middle Click',
-        2: 'Right Click'
-      };
-      const name = buttonMap[e.button] || `Button ${e.button}`;
-      mouseStats[name] = (mouseStats[name] || 0) + 1;
-      updateDisplay();
-    });
-  </script>
-</body>
+    <script src="renderer.js"></script>
+  </body>
 </html>
