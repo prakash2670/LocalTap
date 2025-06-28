@@ -47,7 +47,20 @@ def on_key_press(key):
     print(f"[KEY] {key_name}")
     emit({ "source": "keyboard", "name": key_name })
 
+def on_click(x, y, button, pressed):
+    if pressed:
+        name = str(button).replace('Button.', '')
+        print(f"[MOUSE] Click {name}")
+        emit({ "source": "mouse", "name": f"{name} Click" })
+
+def on_scroll(x, y, dx, dy):
+    scroll = f"Scroll {'Up' if dy > 0 else 'Down'}"
+    print(f"[MOUSE] {scroll}")
+    emit({ "source": "mouse", "name": scroll })
+
 connect_ws()
 keyboard.Listener(on_press=on_key_press).start()
+mouse.Listener(on_click=on_click, on_scroll=on_scroll).start()
+
 while True:
     time.sleep(10)

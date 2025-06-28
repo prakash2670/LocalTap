@@ -1,36 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LocalTap — Realtime Tracker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="icon" type="image/png" href="icon.png" />
-  </head>
-  <body class="bg-gray-900 text-white font-sans min-h-screen flex flex-col items-center py-6 px-4">
-    <header class="mb-6">
-      <h1 class="text-4xl font-bold mb-2 text-center">👋 Welcome, <span id="username" class="text-blue-400">User</span></h1>
-      <p class="text-gray-400 text-center">Tracking your activity live...</p>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LocalTap — Realtime Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/png" href="icon.png" />
+</head>
+<body class="bg-gray-900 text-white font-sans min-h-screen flex flex-col items-center py-6 px-4">
+  <header class="mb-6">
+    <h1 class="text-4xl font-bold mb-2 text-center">👋 Welcome, <span id="username" class="text-blue-400">User</span></h1>
+    <p class="text-gray-400 text-center">Tracking your activity live...</p>
+  </header>
 
-    <main class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6">
-      <section class="bg-gray-800 rounded-2xl shadow-xl p-6">
-        <h2 class="text-xl font-semibold mb-4 text-center">⌨️ Top 10 Key Presses</h2>
-        <ul id="topKeysList" class="space-y-2"></ul>
-      </section>
+  <!-- Grid Panels -->
+  <main class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Top Keys Panel -->
+    <section class="bg-gray-800 rounded-2xl shadow-xl p-6">
+      <h2 class="text-xl font-semibold mb-4 text-center">⌨️ Top 10 Key Presses</h2>
+      <ul id="topKeysList" class="space-y-2"></ul>
+    </section>
 
-      <section class="bg-gray-800 rounded-2xl shadow-xl p-6">
-        <h2 class="text-xl font-semibold mb-4 text-center">📈 Activity Stats</h2>
-        <div id="realtimeStats" class="text-sm text-gray-300">
-          <p class="italic">Waiting for input...</p>
-        </div>
-      </section>
-    </main>
+    <!-- Mouse Activity Panel -->
+    <section class="bg-gray-800 rounded-2xl shadow-xl p-6">
+      <h2 class="text-xl font-semibold mb-4 text-center">🖱️ Mouse Activity</h2>
+      <ul id="mouseTopList" class="space-y-2"></ul>
+    </section>
 
-    <footer class="mt-10 text-sm text-gray-500 text-center">
-      &copy; 2025 LocalTap. All rights reserved.
-    </footer>
+    <!-- Summary Panel -->
+    <section class="bg-gray-800 rounded-2xl shadow-xl p-6">
+      <h2 class="text-xl font-semibold mb-4 text-center">📈 Activity Summary</h2>
+      <div id="realtimeStats" class="text-sm text-gray-300">
+        <p class="italic">Waiting for input...</p>
+      </div>
+    </section>
 
-    <script src="renderer.js"></script>
-  </body>
+    <!-- Future Panel -->
+    <section class="bg-gray-800 rounded-2xl shadow-xl p-6">
+      <h2 class="text-xl font-semibold mb-4 text-center">📊 Coming Soon</h2>
+      <p class="text-center text-gray-500">Badges, Achievements, Graphs</p>
+    </section>
+  </main>
+
+  <footer class="mt-10 text-sm text-gray-500 text-center">
+    &copy; 2025 LocalTap. All rights reserved.
+  </footer>
+
+  <script src="renderer.js"></script>
+</body>
 </html>
