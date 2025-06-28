@@ -2,10 +2,10 @@
   "name": "localtap",
   "version": "1.0.0",
   "description": "Desktop input tracker application",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,11 @@
     "url": "https://github.com/prakash2670/LocalTap/issues"
   },
   "homepage": "https://github.com/prakash2670/LocalTap#readme",
+  "dependencies": {
+    "electron": "^28.0.0",
+    "chart.js": "^4.4.0"
+  },
   "devDependencies": {
-    "electron": "^22.3.27"
+    "electron-builder": "^24.9.0"
   }
 }

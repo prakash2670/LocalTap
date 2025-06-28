@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LocalTap</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-100">
+  <div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold text-center my-4">LocalTap Activity Tracker</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Top Keys Section -->
+      <div class="bg-white p-4 rounded shadow col-span-2">
+        <h2 class="text-xl font-semibold mb-2">Top Keys</h2>
+        <div id="top-keys-container" class="grid grid-cols-5 gap-2"></div>
+      </div>
+      
+      <!-- Stats Section -->
+      <div class="bg-white p-4 rounded shadow">
+        <h2 class="text-xl font-semibold mb-2">Statistics</h2>
+        <div class="space-y-2">
+          <div>Total Keystrokes: <span id="total-keystrokes">0</span></div>
+          <div>Total Clicks: <span id="total-clicks">0</span></div>
+          <div>Key of the Day: <span id="key-of-day">-</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="bg-white p-4 rounded shadow mt-4">
+      <h2 class="text-xl font-semibold mb-2">Activity</h2>
+      <canvas id="activity-chart" height="200"></canvas>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>
