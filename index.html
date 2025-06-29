@@ -1,28 +1,285 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Top Pressed Keys</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; }
-        h1 { font-size: 20px; }
-        ul { padding-left: 20px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LocalTap - Keystroke & Mouse Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .key-list {
+      list-style: none;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .key-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      border-left: 4px solid #4CAF50;
+      transition: all 0.3s ease;
+    }
+
+    .key-list li:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(5px);
+    }
+
+    .key-name {
+      font-weight: 600;
+    }
+
+    .key-count {
+      background: #4CAF50;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+
+    .mouse-stats {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+    }
+
+    .mouse-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      border-left: 4px solid #2196F3;
+    }
+
+    .mouse-item span:first-child {
+      font-weight: 600;
+    }
+
+    .mouse-item span:last-child {
+      background: #2196F3;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .summary-item {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .summary-item h3 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.8;
+      margin-bottom: 10px;
+    }
+
+    .summary-item .number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #4CAF50;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .controls {
+      text-align: center;
+    }
+
+    .btn {
+      background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 0 10px;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+    }
+
+    .status {
+      text-align: center;
+      margin-top: 20px;
+      opacity: 0.7;
+      font-size: 0.9rem;
+    }
+
+    /* Scrollbar styling */
+    .key-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .key-list::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .key-list::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 3px;
+    }
+
+    .key-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      .summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Top 10 Pressed Keys</h1>
-    <ul id="keyList"></ul>
+  <div class="container">
+    <div class="header">
+      <h1>LocalTap</h1>
+      <p>Real-time Keystroke & Mouse Activity Tracker</p>
+    </div>
 
-    <script>
-        const keyList = document.getElementById('keyList');
+    <div class="summary">
+      <div class="summary-item">
+        <h3>Total Keys</h3>
+        <div class="number" id="total-keys">0</div>
+      </div>
+      <div class="summary-item">
+        <h3>Total Clicks</h3>
+        <div class="number" id="total-clicks">0</div>
+      </div>
+      <div class="summary-item">
+        <h3>Last Activity</h3>
+        <div class="number" id="last-activity" style="font-size: 1rem;">Never</div>
+      </div>
+    </div>
 
-        window.electronAPI.onUpdateTopKeys((topKeys) => {
-            keyList.innerHTML = '';
-            topKeys.forEach(([key, count]) => {
-                const li = document.createElement('li');
-                li.textContent = `${key} — ${count}`;
-                keyList.appendChild(li);
-            });
-        });
-    </script>
+    <div class="stats-grid">
+      <div class="card">
+        <h2>🔥 Top 10 Keys Pressed Today</h2>
+        <ul class="key-list" id="key-list">
+          <li>No keys pressed yet</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h2>🖱️ Mouse Clicks</h2>
+        <div class="mouse-stats">
+          <div class="mouse-item">
+            <span>Left Clicks</span>
+            <span id="left-clicks">0</span>
+          </div>
+          <div class="mouse-item">
+            <span>Right Clicks</span>
+            <span id="right-clicks">0</span>
+          </div>
+          <div class="mouse-item">
+            <span>Middle Clicks</span>
+            <span id="middle-clicks">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="reset-btn">Reset Statistics</button>
+    </div>
+
+    <div class="status">
+      <p>🎯 Tracking your activity in real-time. Press any key or click to see updates!</p>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
 </body>
 </html>

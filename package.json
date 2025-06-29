@@ -1,29 +1,55 @@
 {
   "name": "localtap",
   "version": "1.0.0",
-  "description": "Desktop input tracker application",
+  "description": "Real-time keystroke and mouse activity tracker",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "dist": "electron-builder --publish=never",
+    "pack": "electron-builder --dir"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/prakash2670/LocalTap.git"
-  },
-  "keywords": [
-    "Electron",
-    "KeyStrokes",
-    "pynput",
-    "input"
-  ],
+  "keywords": ["electron", "keystroke", "mouse", "tracker", "productivity"],
   "author": "Guguloth Bhanu Prakash",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/prakash2670/LocalTap/issues"
+  "dependencies": {
+    "electron": "^27.0.0",
+    "uiohook-napi": "^1.5.4"
   },
-  "homepage": "https://github.com/prakash2670/LocalTap#readme",
   "devDependencies": {
-    "electron": "^22.3.27"
+    "electron-builder": "^24.6.4"
+  },
+  "build": {
+    "appId": "com.bhanuprakash.localtap",
+    "productName": "LocalTap",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
 }
