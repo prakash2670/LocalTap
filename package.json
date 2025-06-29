@@ -14,11 +14,11 @@
   "author": "Guguloth Bhanu Prakash",
   "license": "MIT",
   "dependencies": {
-    "electron": "^27.0.0",
     "uiohook-napi": "^1.5.4"
   },
   "devDependencies": {
-    "electron-builder": "^24.6.4"
+    "electron-builder": "^24.6.4",
+      "electron": "^27.0.0"
   },
   "build": {
     "appId": "com.bhanuprakash.localtap",

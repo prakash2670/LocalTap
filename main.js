@@ -18,9 +18,6 @@ function createWindow() {
   });
 
   win.loadFile('index.html');
-  
-  // Optional: Open DevTools for debugging
-  // win.webContents.openDevTools();
 }
 
 function initializeTracker() {
