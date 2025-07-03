@@ -10,46 +10,37 @@
     "dist": "electron-builder --publish=never",
     "pack": "electron-builder --dir"
   },
-  "keywords": ["electron", "keystroke", "mouse", "tracker", "productivity"],
+  "keywords": [
+    "electron",
+    "keystroke",
+    "mouse",
+    "tracker",
+    "productivity"
+  ],
   "author": "Guguloth Bhanu Prakash",
   "license": "MIT",
   "dependencies": {
     "uiohook-napi": "^1.5.4"
   },
   "devDependencies": {
-    "electron-builder": "^24.6.4",
-      "electron": "^27.0.0"
+    "electron": "^37.2.0",
+    "electron-builder": "^24.6.4"
   },
   "build": {
-    "appId": "com.bhanuprakash.localtap",
-    "productName": "LocalTap",
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "main.js",
-      "preload.js",
-      "renderer.js",
-      "index.html",
-      "package.json"
+  "appId": "com.bhanuprakash.localtap",
+  "productName": "LocalTap",
+  "win": {
+    "target": "portable",
+    "icon": "assets/icon.ico",
+    "extraFiles": [
+      "!darwin/**"
     ],
-    "win": {
-      "target": "nsis",
-      "icon": "assets/icon.ico"
-    },
-    "mac": {
-      "target": "dmg",
-      "icon": "assets/icon.icns"
-    },
-    "linux": {
-      "target": "AppImage",
-      "icon": "assets/icon.png"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true
-    }
+    "asar": true
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true
   }
+}
 }
